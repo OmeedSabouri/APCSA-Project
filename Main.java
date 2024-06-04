@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 
@@ -234,26 +234,28 @@ public class Main {
       else if ((inp.length() >= 6) && (inp.substring(0,6).equals("myapps"))) {
         String nam = inp.substring(inp.indexOf("myapps")+7);
 
-        int z = data.read();
+        StringBuilder fileData = new StringBuilder();
 
-        String fileData = "";
+        try (InputStream data3 = new FileInputStream("data.txt")) {
+            int z = data3.read();
 
-        while(z != -1) {
-          fileData += (char) z;
-
-          // Reads next byte from the file
-          z = data.read();
+            while (z != -1) {
+                fileData.append((char) z);
+                z = data3.read();
+            }
         }
-        data.close();
+
+        String fileDataStr = fileData.toString();
 
         System.out.println("\u001B[44;1m                     JOB APPLICATIONS                     " + "\u001B[0m" + "\u001B[34m");
 
-        while (fileData.contains(nam)) {
-          
-          int j = Integer.parseInt((fileData.substring(fileData.indexOf(nam)+nam.length()+17, fileData.indexOf('\n', fileData.indexOf(fileData.substring(fileData.indexOf(nam)+nam.length()+17))))));
-          System.out.println("JOB#" + j + " - " + JobTracker.jobWithID(j).getPosition() + " at " + JobTracker.jobWithID(j).getCompany());
+        while (fileDataStr.contains(nam)) {
+            int startIndex = fileDataStr.indexOf(nam) + nam.length() + 17;
+            int endIndex = fileDataStr.indexOf('\n', startIndex);
+            int j = Integer.parseInt(fileDataStr.substring(startIndex, endIndex));
+            System.out.println("JOB#" + j + " - " + JobTracker.jobWithID(j).getPosition() + " at " + JobTracker.jobWithID(j).getCompany());
 
-          fileData = fileData.substring(fileData.indexOf(nam)+nam.length());
+            fileDataStr = fileDataStr.substring(fileDataStr.indexOf(nam) + nam.length());
         }
       }
 
