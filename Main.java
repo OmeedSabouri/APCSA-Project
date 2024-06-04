@@ -250,9 +250,9 @@ public class Main {
         System.out.println("\u001B[44;1m                     JOB APPLICATIONS                     " + "\u001B[0m" + "\u001B[34m");
 
         while (fileDataStr.contains(nam)) {
-            int startIndex = fileDataStr.indexOf(nam) + nam.length() + 17;
-            int endIndex = fileDataStr.indexOf('\n', startIndex);
-            int j = Integer.parseInt(fileDataStr.substring(startIndex, endIndex));
+            int start = fileDataStr.indexOf(nam) + nam.length() + 17;
+            int end = fileDataStr.indexOf('\n', start);
+            int j = Integer.parseInt(fileDataStr.substring(start, end));
             System.out.println("JOB#" + j + " - " + JobTracker.jobWithID(j).getPosition() + " at " + JobTracker.jobWithID(j).getCompany());
 
             fileDataStr = fileDataStr.substring(fileDataStr.indexOf(nam) + nam.length());
